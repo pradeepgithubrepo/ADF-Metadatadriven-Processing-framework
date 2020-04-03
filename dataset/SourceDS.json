@@ -9,6 +9,10 @@
 			"FileName": {
 				"type": "string",
 				"defaultValue": "@pipeline().parameters.SourceFile"
+			},
+			"FilePath": {
+				"type": "string",
+				"defaultValue": "@pipeline().parameters.SourcePath"
 			}
 		},
 		"annotations": [],
@@ -16,8 +20,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "moviesdb",
-				"fileSystem": "source"
+				"fileSystem": "@pipeline().parameters.SourcePath"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
