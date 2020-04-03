@@ -1,0 +1,11 @@
+{
+	"name": "Stage1_pipeline",
+	"properties": {
+		"parameters": {
+			"SourceFile": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
