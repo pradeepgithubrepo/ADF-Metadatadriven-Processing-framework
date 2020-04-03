@@ -14,6 +14,9 @@
 		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
 			"value": "@triggerBody().folderPath"
 		},
+		"source-trigger_properties_Stage1_pipeline_parameters_SourcePath": {
+			"value": "@triggerBody().fileName"
+		},
 		"source-trigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
 		},

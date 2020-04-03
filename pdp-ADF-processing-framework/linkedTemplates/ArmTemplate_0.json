@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "@triggerBody().folderPath"
 		},
+		"source-trigger_properties_Stage1_pipeline_parameters_SourcePath": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
@@ -58,6 +62,10 @@
 					"FileName": {
 						"type": "string",
 						"defaultValue": "@pipeline().parameters.SourceFile"
+					},
+					"FilePath": {
+						"type": "string",
+						"defaultValue": "@pipeline().parameters.SourcePath"
 					}
 				},
 				"annotations": [],
@@ -65,9 +73,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "@dataset().FileName",
-						"folderPath": "moviesdb",
-						"fileSystem": "source"
+						"fileSystem": "@dataset().FilePath"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
@@ -154,7 +160,9 @@
 								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "AzureBlobFSReadSettings",
-									"recursive": true
+									"recursive": true,
+									"wildcardFileName": "*.csv",
+									"enablePartitionDiscovery": false
 								},
 								"formatSettings": {
 									"type": "DelimitedTextReadSettings"
@@ -178,7 +186,8 @@
 								"referenceName": "SourceDS",
 								"type": "DatasetReference",
 								"parameters": {
-									"FileName": "@pipeline().parameters.SourceFile"
+									"FileName": "@pipeline().parameters.SourceFile",
+									"FilePath": "@pipeline().parameters.SourcePath"
 								}
 							}
 						],
@@ -193,6 +202,9 @@
 				],
 				"parameters": {
 					"SourceFile": {
+						"type": "string"
+					},
+					"SourcePath": {
 						"type": "string"
 					}
 				},
@@ -218,13 +230,14 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"SourceFile": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]"
+							"SourceFile": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]",
+							"SourcePath": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourcePath')]"
 						}
 					}
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/source/blobs/moviesdb",
+					"blobPathBeginsWith": "/source/blobs/",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('source-trigger_properties_typeProperties_scope')]",
 					"events": [
