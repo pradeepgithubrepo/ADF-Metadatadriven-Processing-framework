@@ -25,6 +25,17 @@
 							"type": "DelimitedTextReadSettings"
 						}
 					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
 					"enableStaging": false
 				},
 				"inputs": [
@@ -34,6 +45,12 @@
 						"parameters": {
 							"FileName": "@pipeline().parameters.SourceFile"
 						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "destDS",
+						"type": "DatasetReference"
 					}
 				]
 			}
