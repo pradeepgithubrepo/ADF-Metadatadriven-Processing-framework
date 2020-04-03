@@ -3,7 +3,8 @@
 	"properties": {
 		"parameters": {
 			"filepath": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "@trigger"
 			}
 		},
 		"annotations": []
