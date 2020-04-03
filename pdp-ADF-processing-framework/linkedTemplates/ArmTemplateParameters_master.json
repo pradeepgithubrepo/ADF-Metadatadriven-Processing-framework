@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "pdp-ADF-processing-framework"
+		},
+		"BlobLinkedservice_accountKey": {
+			"value": ""
+		},
+		"source-trigger_properties_rawpipeline_parameters_filepath": {
+			"value": "@triggerBody.filePath"
+		},
+		"source-trigger_properties_rawpipeline_parameters_filename": {
+			"value": "@triggerBody.fileName"
+		},
+		"source-trigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
+		},
+		"BlobLinkedservice_properties_typeProperties_url": {
+			"value": "https://pradeepdatalake.dfs.core.windows.net"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
