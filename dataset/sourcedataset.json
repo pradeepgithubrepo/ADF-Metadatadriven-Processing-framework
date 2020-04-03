@@ -6,13 +6,9 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"dsfilename": {
+			"FileName": {
 				"type": "string",
-				"defaultValue": "@pipeline().parameters.filename"
-			},
-			"dsfilepath": {
-				"type": "string",
-				"defaultValue": "@pipeline().parameters.filepath"
+				"defaultValue": "@pipeline().parameters.SourceFile"
 			}
 		},
 		"annotations": [],
