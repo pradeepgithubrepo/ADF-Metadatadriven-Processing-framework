@@ -20,8 +20,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@pipeline().parameters.filename",
-				"fileSystem": "@pipeline().parameters.filepath"
+				"fileName": "@dataset().dsfilename",
+				"fileSystem": "@dataset().dsfilepath"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
