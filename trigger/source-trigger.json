@@ -4,10 +4,21 @@
 		"description": "Trigger to kick of when a vendor file is received.",
 		"annotations": [],
 		"runtimeState": "Stopped",
-		"pipelines": [],
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "rawpipeline",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"filepath": "@triggerBody.filePath",
+					"filename": "@triggerBody.fileName"
+				}
+			}
+		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/source/blobs/moviesdb",
+			"blobPathBeginsWith": "/source/blobs/",
 			"ignoreEmptyBlobs": true,
 			"scope": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake",
 			"events": [
