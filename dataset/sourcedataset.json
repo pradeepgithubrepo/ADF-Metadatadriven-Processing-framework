@@ -17,7 +17,8 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "@dataset().FileName",
-				"fileSystem": "moviesdb"
+				"folderPath": "moviesdb",
+				"fileSystem": "source"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
