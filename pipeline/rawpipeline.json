@@ -3,10 +3,12 @@
 	"properties": {
 		"parameters": {
 			"filepath": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "novalue"
 			},
 			"filename": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "novalue"
 			}
 		},
 		"annotations": []
