@@ -58,6 +58,9 @@
 		"parameters": {
 			"SourceFile": {
 				"type": "string"
+			},
+			"SourcePath": {
+				"type": "string"
 			}
 		},
 		"annotations": []
