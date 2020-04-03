@@ -16,8 +16,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@dataset().dsfilename",
-				"fileSystem": "@dataset().dsfilepath"
+				"fileName": "@dataset().FileName",
+				"fileSystem": "moviesdb"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
