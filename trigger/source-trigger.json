@@ -4,17 +4,7 @@
 		"description": "Trigger to kick of when a vendor file is received.",
 		"annotations": [],
 		"runtimeState": "Started",
-		"pipelines": [
-			{
-				"pipelineReference": {
-					"referenceName": "rawpipeline",
-					"type": "PipelineReference"
-				},
-				"parameters": {
-					"SourceFile": "@triggerBody().fileName"
-				}
-			}
-		],
+		"pipelines": [],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
 			"blobPathBeginsWith": "/source/blobs/moviesdb",
