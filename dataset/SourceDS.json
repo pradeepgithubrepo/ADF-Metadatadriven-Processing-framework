@@ -16,7 +16,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "@dataset().FileName",
 				"folderPath": "moviesdb",
 				"fileSystem": "source"
 			},
