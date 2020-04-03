@@ -43,7 +43,7 @@
 						"referenceName": "sourcedataset",
 						"type": "DatasetReference",
 						"parameters": {
-							"dsfilename": "@pipeline().parameters.filename",
+							"FileName": "@pipeline().parameters.filename",
 							"dsfilepath": "@pipeline().parameters.filepath"
 						}
 					}
