@@ -11,21 +11,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
-		"source-trigger_properties_rawpipeline_parameters_filepath": {
+		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "@triggerBody.filePath"
+			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
-		"source-trigger_properties_rawpipeline_parameters_filename": {
+		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
 			"type": "string",
-			"defaultValue": "@triggerBody.fileName"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"BlobLinkedservice_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -60,11 +56,8 @@
 					"BlobLinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('BlobLinkedservice_properties_typeProperties_url')]"
 					},
-					"source-trigger_properties_rawpipeline_parameters_filepath": {
-						"value": "[parameters('source-trigger_properties_rawpipeline_parameters_filepath')]"
-					},
-					"source-trigger_properties_rawpipeline_parameters_filename": {
-						"value": "[parameters('source-trigger_properties_rawpipeline_parameters_filename')]"
+					"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
+						"value": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]"
 					},
 					"source-trigger_properties_typeProperties_scope": {
 						"value": "[parameters('source-trigger_properties_typeProperties_scope')]"

@@ -15,13 +15,9 @@
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
-		"source-trigger_properties_rawpipeline_parameters_filepath": {
+		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
 			"type": "string",
-			"defaultValue": "@triggerBody.filePath"
-		},
-		"source-trigger_properties_rawpipeline_parameters_filename": {
-			"type": "string",
-			"defaultValue": "@triggerBody.fileName"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
@@ -50,7 +46,7 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/sourcedataset')]",
+			"name": "[concat(parameters('factoryName'), '/SourceDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -59,13 +55,9 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"dsfilename": {
+					"FileName": {
 						"type": "string",
-						"defaultValue": "@pipeline().parameters.filename"
-					},
-					"dsfilepath": {
-						"type": "string",
-						"defaultValue": "@pipeline().parameters.filepath"
+						"defaultValue": "@pipeline().parameters.SourceFile"
 					}
 				},
 				"annotations": [],
@@ -73,21 +65,48 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "@dataset().dsfilename",
-						"fileSystem": "@dataset().dsfilepath"
+						"fileName": "@dataset().FileName",
+						"folderPath": "moviesdb",
+						"fileSystem": "source"
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
-				"schema": []
+				"schema": [
+					{
+						"name": "movie",
+						"type": "String"
+					},
+					{
+						"name": "title",
+						"type": "String"
+					},
+					{
+						"name": "genres",
+						"type": "String"
+					},
+					{
+						"name": "year",
+						"type": "String"
+					},
+					{
+						"name": "Rating",
+						"type": "String"
+					},
+					{
+						"name": "Rotton Tomato",
+						"type": "String"
+					}
+				]
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/rawdataset')]",
+			"name": "[concat(parameters('factoryName'), '/destDS')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -104,7 +123,6 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
-					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
@@ -114,13 +132,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/rawpipeline')]",
+			"name": "[concat(parameters('factoryName'), '/Stage1_pipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Source to Raw copy",
+						"name": "source_to_raw",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -157,17 +175,16 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "sourcedataset",
+								"referenceName": "SourceDS",
 								"type": "DatasetReference",
 								"parameters": {
-									"dsfilename": "@pipeline().parameters.filename",
-									"dsfilepath": "@pipeline().parameters.filepath"
+									"FileName": "@pipeline().parameters.SourceFile"
 								}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "rawdataset",
+								"referenceName": "destDS",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -175,20 +192,15 @@
 					}
 				],
 				"parameters": {
-					"filepath": {
-						"type": "string",
-						"defaultValue": "novalue"
-					},
-					"filename": {
-						"type": "string",
-						"defaultValue": "novalue"
+					"SourceFile": {
+						"type": "string"
 					}
 				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/sourcedataset')]",
-				"[concat(variables('factoryId'), '/datasets/rawdataset')]"
+				"[concat(variables('factoryId'), '/datasets/SourceDS')]",
+				"[concat(variables('factoryId'), '/datasets/destDS')]"
 			]
 		},
 		{
@@ -198,22 +210,21 @@
 			"properties": {
 				"description": "Trigger to kick of when a vendor file is received.",
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "rawpipeline",
+							"referenceName": "Stage1_pipeline",
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"filepath": "[parameters('source-trigger_properties_rawpipeline_parameters_filepath')]",
-							"filename": "[parameters('source-trigger_properties_rawpipeline_parameters_filename')]"
+							"SourceFile": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]"
 						}
 					}
 				],
 				"type": "BlobEventsTrigger",
 				"typeProperties": {
-					"blobPathBeginsWith": "/source/blobs/",
+					"blobPathBeginsWith": "/source/blobs/moviesdb",
 					"ignoreEmptyBlobs": true,
 					"scope": "[parameters('source-trigger_properties_typeProperties_scope')]",
 					"events": [
@@ -222,7 +233,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/rawpipeline')]"
+				"[concat(variables('factoryId'), '/pipelines/Stage1_pipeline')]"
 			]
 		}
 	]

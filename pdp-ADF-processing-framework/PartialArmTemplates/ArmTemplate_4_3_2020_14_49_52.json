@@ -6,22 +6,6 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "pdp-ADF-processing-framework"
-		},
-		"BlobLinkedservice_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
-		},
-		"BlobLinkedservice_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
-		},
-		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
-			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
-		},
-		"source-trigger_properties_typeProperties_scope": {
-			"type": "string",
-			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
 		}
 	},
 	"variables": {
@@ -36,10 +20,10 @@
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
-					"url": "[parameters('BlobLinkedservice_properties_typeProperties_url')]",
+					"url": "https://pradeepdatalake.dfs.core.windows.net",
 					"accountKey": {
 						"type": "SecureString",
-						"value": "[parameters('BlobLinkedservice_accountKey')]"
+						"value": "**********"
 					}
 				}
 			},
@@ -60,7 +44,7 @@
 							"type": "PipelineReference"
 						},
 						"parameters": {
-							"SourceFile": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]"
+							"SourceFile": "@triggerBody().folderPath"
 						}
 					}
 				],
@@ -68,7 +52,7 @@
 				"typeProperties": {
 					"blobPathBeginsWith": "/source/blobs/moviesdb",
 					"ignoreEmptyBlobs": true,
-					"scope": "[parameters('source-trigger_properties_typeProperties_scope')]",
+					"scope": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake",
 					"events": [
 						"Microsoft.Storage.BlobCreated"
 					]
@@ -132,8 +116,7 @@
 						"outputs": [
 							{
 								"referenceName": "destDS",
-								"type": "DatasetReference",
-								"parameters": {}
+								"type": "DatasetReference"
 							}
 						]
 					}
