@@ -43,7 +43,8 @@
 						"referenceName": "SourceDS",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "@pipeline().parameters.SourceFile"
+							"FileName": "@pipeline().parameters.SourceFile",
+							"FilePath": "@pipeline().parameters.SourcePath"
 						}
 					}
 				],
