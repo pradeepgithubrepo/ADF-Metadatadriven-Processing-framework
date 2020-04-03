@@ -1,0 +1,11 @@
+{
+	"name": "rawpipeline",
+	"properties": {
+		"parameters": {
+			"filepath": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
