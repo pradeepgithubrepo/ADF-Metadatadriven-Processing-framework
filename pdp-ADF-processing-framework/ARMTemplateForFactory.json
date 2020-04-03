@@ -17,11 +17,11 @@
 		},
 		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
 			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
+			"defaultValue": "@triggerBody().fileName"
 		},
 		"source-trigger_properties_Stage1_pipeline_parameters_SourcePath": {
 			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
