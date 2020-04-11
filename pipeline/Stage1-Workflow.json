@@ -27,7 +27,7 @@
 							"type": "Expression"
 						}
 					},
-					"body": "{\"containername\":@pipeline().parameters.sourcepath,\"filename\":@pipeline().parameters.sourcefile}"
+					"body": ""
 				},
 				"linkedServiceName": {
 					"referenceName": "SanityAzureFunction",
