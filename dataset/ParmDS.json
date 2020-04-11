@@ -1,18 +1,18 @@
 {
-	"name": "SourceDS",
+	"name": "ParmDS",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobLinkedservice",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"FileName": {
+			"filecontainer": {
 				"type": "string",
-				"defaultValue": "@pipeline().parameters.SourceFile"
+				"defaultValue": "@activity(\"SanityCheck\").output.map.parmcontainer"
 			},
-			"FilePath": {
+			"filepath": {
 				"type": "string",
-				"defaultValue": "@pipeline().parameters.SourcePath"
+				"defaultValue": "@activity(\"SanityCheck\").output.map.parmloc"
 			}
 		},
 		"annotations": [],
@@ -20,9 +20,12 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"folderPath": "@dataset().FileName",
+				"fileName": {
+					"value": "@dataset().filepath",
+					"type": "Expression"
+				},
 				"fileSystem": {
-					"value": "@dataset().FilePath",
+					"value": "@dataset().filecontainer",
 					"type": "Expression"
 				}
 			},
@@ -31,31 +34,6 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "movie",
-				"type": "String"
-			},
-			{
-				"name": "title",
-				"type": "String"
-			},
-			{
-				"name": "genres",
-				"type": "String"
-			},
-			{
-				"name": "year",
-				"type": "String"
-			},
-			{
-				"name": "Rating",
-				"type": "String"
-			},
-			{
-				"name": "Rotton Tomato",
-				"type": "String"
-			}
-		]
+		"schema": []
 	}
 }
