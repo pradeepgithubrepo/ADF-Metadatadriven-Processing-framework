@@ -9,6 +9,10 @@
 				"pipelineReference": {
 					"referenceName": "Stage1-Workflow",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"sourcefile": "triggerBody().filename",
+					"sourcepath": "triggerBody().folderpath"
 				}
 			}
 		],
