@@ -7,21 +7,21 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "pdp-ADF-processing-framework"
 		},
-		"BlobLinkedservice_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
-		},
 		"AzureBlobStoragelinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStoragelinkedservice'"
 		},
-		"hdinsightservice_password": {
+		"BlobLinkedservice_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hdinsightservice'"
+			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
 		"scriptlinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
+		},
+		"SanityAzureFunction_functionKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'functionKey' of 'SanityAzureFunction'"
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
@@ -38,10 +38,6 @@
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"hdinsightservice_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "admin"
 		},
 		"containerUri": {
 			"type": "string",
@@ -70,23 +66,20 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"BlobLinkedservice_accountKey": {
-						"value": "[parameters('BlobLinkedservice_accountKey')]"
-					},
 					"AzureBlobStoragelinkedservice_connectionString": {
 						"value": "[parameters('AzureBlobStoragelinkedservice_connectionString')]"
+					},
+					"BlobLinkedservice_accountKey": {
+						"value": "[parameters('BlobLinkedservice_accountKey')]"
 					},
 					"scriptlinkedservice_connectionString": {
 						"value": "[parameters('scriptlinkedservice_connectionString')]"
 					},
-					"hdinsightservice_password": {
-						"value": "[parameters('hdinsightservice_password')]"
+					"SanityAzureFunction_functionKey": {
+						"value": "[parameters('SanityAzureFunction_functionKey')]"
 					},
 					"BlobLinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('BlobLinkedservice_properties_typeProperties_url')]"
-					},
-					"hdinsightservice_properties_typeProperties_userName": {
-						"value": "[parameters('hdinsightservice_properties_typeProperties_userName')]"
 					},
 					"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
 						"value": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]"

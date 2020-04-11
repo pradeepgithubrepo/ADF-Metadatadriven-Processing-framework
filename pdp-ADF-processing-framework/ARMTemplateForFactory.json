@@ -7,21 +7,21 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "pdp-ADF-processing-framework"
 		},
-		"BlobLinkedservice_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
-		},
 		"AzureBlobStoragelinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureBlobStoragelinkedservice'"
 		},
-		"hdinsightservice_password": {
+		"BlobLinkedservice_accountKey": {
 			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'hdinsightservice'"
+			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
 		"scriptlinkedservice_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
+		},
+		"SanityAzureFunction_functionKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'functionKey' of 'SanityAzureFunction'"
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
@@ -38,10 +38,6 @@
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"hdinsightservice_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "admin"
 		}
 	},
 	"variables": {
@@ -150,10 +146,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"folderPath": {
-							"value": "@dataset().FileName",
-							"type": "Expression"
-						},
+						"folderPath": "@dataset().FileName",
 						"fileSystem": {
 							"value": "@dataset().FilePath",
 							"type": "Expression"
@@ -222,6 +215,19 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureBlobStoragelinkedservice')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureBlobStoragelinkedservice_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/BlobLinkedservice')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -234,6 +240,19 @@
 						"type": "SecureString",
 						"value": "[parameters('BlobLinkedservice_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/scriptlinkedservice')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -273,14 +292,31 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/testpipe')]",
+			"name": "[concat(parameters('factoryName'), '/SanityAzureFunction')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureFunction",
+				"typeProperties": {
+					"functionAppUrl": "https://validatorfunc.azurewebsites.net",
+					"functionKey": {
+						"type": "SecureString",
+						"value": "[parameters('SanityAzureFunction_functionKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stage1-pipe')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Hive1",
-						"type": "HDInsightHive",
+						"name": "Azure Function1",
+						"type": "AzureFunctionActivity",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "7.00:00:00",
@@ -291,75 +327,30 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"scriptPath": "script/movies_parm.hql",
-							"scriptLinkedService": {
-								"referenceName": "scriptlinkedservice",
-								"type": "LinkedServiceReference"
-							}
+							"functionName": "BlobValidator",
+							"method": "POST",
+							"headers": {},
+							"body": "'{\"containername\":\"source/activedeaths\", \"filename\":\"total_deaths.csv\"}'"
 						},
 						"linkedServiceName": {
-							"referenceName": "hdinsightservice",
+							"referenceName": "SanityAzureFunction",
 							"type": "LinkedServiceReference"
 						}
 					}
 				],
+				"parameters": {
+					"sourcefile": {
+						"type": "string"
+					},
+					"sourcepath": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/hdinsightservice')]",
-				"[concat(variables('factoryId'), '/linkedServices/scriptlinkedservice')]"
+				"[concat(variables('factoryId'), '/linkedServices/SanityAzureFunction')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureBlobStoragelinkedservice')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('AzureBlobStoragelinkedservice_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/hdinsightservice')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "HDInsight",
-				"typeProperties": {
-					"clusterUri": "https://adfhdinsight.azurehdinsight.net",
-					"userName": "[parameters('hdinsightservice_properties_typeProperties_userName')]",
-					"password": {
-						"type": "SecureString",
-						"value": "[parameters('hdinsightservice_password')]"
-					},
-					"isEspEnabled": false,
-					"linkedServiceName": {
-						"referenceName": "AzureBlobStoragelinkedservice",
-						"type": "LinkedServiceReference"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStoragelinkedservice')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/scriptlinkedservice')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
-				}
-			},
-			"dependsOn": []
 		}
 	]
 }

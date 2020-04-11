@@ -5,16 +5,16 @@
 		"factoryName": {
 			"value": "pdp-ADF-processing-framework"
 		},
-		"BlobLinkedservice_accountKey": {
-			"value": ""
-		},
 		"AzureBlobStoragelinkedservice_connectionString": {
 			"value": ""
 		},
-		"hdinsightservice_password": {
+		"BlobLinkedservice_accountKey": {
 			"value": ""
 		},
 		"scriptlinkedservice_connectionString": {
+			"value": ""
+		},
+		"SanityAzureFunction_functionKey": {
 			"value": ""
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
@@ -28,9 +28,6 @@
 		},
 		"source-trigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"hdinsightservice_properties_typeProperties_userName": {
-			"value": "admin"
 		},
 		"containerUri": {
 			"value": ""
