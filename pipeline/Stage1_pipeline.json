@@ -42,11 +42,11 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "SourceDS",
+						"referenceName": "ParmDS",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "@pipeline().parameters.SourceFile",
-							"FilePath": "@pipeline().parameters.SourcePath"
+							"filecontainer": "@pipeline().parameters.SourceFile",
+							"filepath": "@pipeline().parameters.SourcePath"
 						}
 					}
 				],

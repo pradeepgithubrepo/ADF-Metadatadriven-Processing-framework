@@ -52,7 +52,27 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "ParmDS",
+						"type": "DatasetReference",
+						"parameters": {
+							"filecontainer": "@activity(\"SanityCheck\").output.map.parmcontainer",
+							"filepath": "@activity(\"SanityCheck\").output.map.parmloc"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
