@@ -8,11 +8,11 @@
 		"parameters": {
 			"filecontainer": {
 				"type": "string",
-				"defaultValue": "@activity(\"SanityCheck\").output.map.parmcontainer"
+				"defaultValue": "@activity('SanityCheck').output.map.parmcontainer"
 			},
 			"filepath": {
 				"type": "string",
-				"defaultValue": "@activity(\"SanityCheck\").output.map.parmloc"
+				"defaultValue": "@activity('SanityCheck').output.map.parmloc"
 			}
 		},
 		"annotations": [],
