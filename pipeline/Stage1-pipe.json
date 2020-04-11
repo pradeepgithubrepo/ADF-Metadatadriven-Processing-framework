@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"functionName": "BlobValidator",
-					"method": "POST",
+					"method": "GET",
 					"headers": {
 						"containername": {
 							"value": "@pipeline().parameters.sourcepath",
