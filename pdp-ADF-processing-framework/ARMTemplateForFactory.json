@@ -330,7 +330,7 @@
 							"functionName": "BlobValidator",
 							"method": "POST",
 							"headers": {},
-							"body": "{\"containername\":@pipeline().parameters.sourcepath, \"filename\":@pipeline().parameters.sourcefile}"
+							"body": "'{\"containername\":@pipeline().parameters.sourcepath, \"filename\":@pipeline().parameters.sourcefile}'"
 						},
 						"linkedServiceName": {
 							"referenceName": "SanityAzureFunction",
