@@ -27,6 +27,14 @@
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
+		"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
+			"type": "string",
+			"defaultValue": "triggerBody().filename"
+		},
+		"source-trigger_properties_Stage1-Workflow_parameters_sourcepath": {
+			"type": "string",
+			"defaultValue": "triggerBody().folderpath"
+		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
@@ -219,7 +227,7 @@
 									"type": "Expression"
 								}
 							},
-							"body": "{\"containername\":@pipeline().parameters.sourcepath,\"filename\":@pipeline().parameters.sourcefile}"
+							"body": ""
 						},
 						"linkedServiceName": {
 							"referenceName": "SanityAzureFunction",
@@ -335,7 +343,10 @@
 							"referenceName": "Stage1-Workflow",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"sourcefile": "[parameters('source-trigger_properties_Stage1-Workflow_parameters_sourcefile')]",
+							"sourcepath": "[parameters('source-trigger_properties_Stage1-Workflow_parameters_sourcepath')]"
+						}
 					}
 				],
 				"type": "BlobEventsTrigger",

@@ -27,6 +27,14 @@
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
+		"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
+			"type": "string",
+			"defaultValue": "triggerBody().filename"
+		},
+		"source-trigger_properties_Stage1-Workflow_parameters_sourcepath": {
+			"type": "string",
+			"defaultValue": "triggerBody().folderpath"
+		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
@@ -72,6 +80,12 @@
 					},
 					"BlobLinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('BlobLinkedservice_properties_typeProperties_url')]"
+					},
+					"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
+						"value": "[parameters('source-trigger_properties_Stage1-Workflow_parameters_sourcefile')]"
+					},
+					"source-trigger_properties_Stage1-Workflow_parameters_sourcepath": {
+						"value": "[parameters('source-trigger_properties_Stage1-Workflow_parameters_sourcepath')]"
 					},
 					"source-trigger_properties_typeProperties_scope": {
 						"value": "[parameters('source-trigger_properties_typeProperties_scope')]"
