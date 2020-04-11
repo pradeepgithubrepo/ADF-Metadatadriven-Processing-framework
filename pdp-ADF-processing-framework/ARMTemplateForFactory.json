@@ -27,14 +27,6 @@
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
 		},
-		"source-trigger_properties_Stage1_pipeline_parameters_SourceFile": {
-			"type": "string",
-			"defaultValue": "@triggerBody().fileName"
-		},
-		"source-trigger_properties_Stage1_pipeline_parameters_SourcePath": {
-			"type": "string",
-			"defaultValue": "@triggerBody().folderPath"
-		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
@@ -268,13 +260,10 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "Stage1_pipeline",
+							"referenceName": "Stage1-Workflow",
 							"type": "PipelineReference"
 						},
-						"parameters": {
-							"SourceFile": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourceFile')]",
-							"SourcePath": "[parameters('source-trigger_properties_Stage1_pipeline_parameters_SourcePath')]"
-						}
+						"parameters": {}
 					}
 				],
 				"type": "BlobEventsTrigger",
@@ -288,7 +277,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Stage1_pipeline')]"
+				"[concat(variables('factoryId'), '/pipelines/Stage1-Workflow')]"
 			]
 		},
 		{
