@@ -329,8 +329,17 @@
 						"typeProperties": {
 							"functionName": "BlobValidator",
 							"method": "POST",
-							"headers": {},
-							"body": "'{\"containername\":@pipeline().parameters.sourcepath, \"filename\":@pipeline().parameters.sourcefile}'"
+							"headers": {
+								"containername": {
+									"value": "@pipeline().parameters.sourcepath",
+									"type": "Expression"
+								},
+								"filename": {
+									"value": "@pipeline().parameters.sourcefile",
+									"type": "Expression"
+								}
+							},
+							"body": "{\"containername\":@pipeline().parameters.sourcepath,\"filename\":@pipeline().parameters.sourcefile}"
 						},
 						"linkedServiceName": {
 							"referenceName": "SanityAzureFunction",
@@ -340,10 +349,12 @@
 				],
 				"parameters": {
 					"sourcefile": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "tmpsrcfile"
 					},
 					"sourcepath": {
-						"type": "string"
+						"type": "string",
+						"defaultValue": "tmpsrcpath"
 					}
 				},
 				"annotations": []
