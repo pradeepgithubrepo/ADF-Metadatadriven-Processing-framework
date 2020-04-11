@@ -134,11 +134,11 @@
 				"parameters": {
 					"filecontainer": {
 						"type": "string",
-						"defaultValue": "@activity(\"SanityCheck\").output.map.parmcontainer"
+						"defaultValue": "@activity('SanityCheck').output.map.parmcontainer"
 					},
 					"filepath": {
 						"type": "string",
-						"defaultValue": "@activity(\"SanityCheck\").output.map.parmloc"
+						"defaultValue": "@activity('SanityCheck').output.map.parmloc"
 					}
 				},
 				"annotations": [],
@@ -361,7 +361,8 @@
 									"filecontainer": "@activity(\"SanityCheck\").output.map.parmcontainer",
 									"filepath": "@activity(\"SanityCheck\").output.map.parmloc"
 								}
-							}
+							},
+							"firstRowOnly": true
 						}
 					}
 				],
