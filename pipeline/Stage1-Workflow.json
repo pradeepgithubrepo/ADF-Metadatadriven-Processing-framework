@@ -71,7 +71,8 @@
 							"filecontainer": "@activity(\"SanityCheck\").output.map.parmcontainer",
 							"filepath": "@activity(\"SanityCheck\").output.map.parmloc"
 						}
-					}
+					},
+					"firstRowOnly": true
 				}
 			}
 		],
