@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"functionName": "BlobValidator",
 					"method": "POST",
-					"body": "{\"containername\":@pipeline().parameters.sourcepath, \"filename\":@pipeline().parameters.sourcefile}"
+					"body": "'{\"containername\":@pipeline().parameters.sourcepath, \"filename\":@pipeline().parameters.sourcefile}'"
 				},
 				"linkedServiceName": {
 					"referenceName": "SanityAzureFunction",
