@@ -16,7 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"functionName": "BlobValidator",
-					"method": "POST"
+					"method": "POST",
+					"body": "'{\"containername\":\"source/activedeaths\", \"filename\":\"total_deaths.csv\"}'"
 				},
 				"linkedServiceName": {
 					"referenceName": "SanityAzureFunction",
