@@ -203,7 +203,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Azure Function1",
+						"name": "SanityCheck",
 						"type": "AzureFunctionActivity",
 						"dependsOn": [],
 						"policy": {
@@ -216,7 +216,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"functionName": "BlobValidator",
-							"method": "POST",
+							"method": "GET",
 							"headers": {
 								"containername": {
 									"value": "@pipeline().parameters.sourcepath",
