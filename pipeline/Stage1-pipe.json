@@ -27,10 +27,7 @@
 							"type": "Expression"
 						}
 					},
-					"body": {
-						"containername": "source/activedeaths",
-						"filename": "total_deaths.csv"
-					}
+					"body": "{\"containername\":@pipeline().parameters.sourcepath,\"filename\":@pipeline().parameters.sourcefile}"
 				},
 				"linkedServiceName": {
 					"referenceName": "SanityAzureFunction",
