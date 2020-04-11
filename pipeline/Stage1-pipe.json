@@ -1,6 +1,14 @@
 {
 	"name": "Stage1-pipe",
 	"properties": {
+		"parameters": {
+			"sourcefile": {
+				"type": "string"
+			},
+			"sourcepath": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
