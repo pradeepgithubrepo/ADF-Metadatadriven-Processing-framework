@@ -37,10 +37,12 @@
 		],
 		"parameters": {
 			"sourcefile": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "tmpsrcfile"
 			},
 			"sourcepath": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "tmpsrcpath"
 			}
 		},
 		"annotations": []
