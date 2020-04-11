@@ -29,11 +29,11 @@
 		},
 		"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
 			"type": "string",
-			"defaultValue": "triggerBody(). fileName"
+			"defaultValue": "@triggerBody().fileName"
 		},
 		"source-trigger_properties_Stage1-Workflow_parameters_sourcepath": {
 			"type": "string",
-			"defaultValue": "triggerBody(). folderPath"
+			"defaultValue": "@triggerBody().folderPath"
 		},
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
