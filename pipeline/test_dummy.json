@@ -17,7 +17,10 @@
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
 					"defines": {
-						"srcfilelocation": "abfss://pharmacypoc@yuhaadlspoc.dfs.core.windows.net/source/cases/total_cases.csv"
+						"srcfilelocation": {
+							"value": "@concat('abfss://pharmacypoc@yuhaadlspoc.dfs.core.windows.net/source/','cases/total_cases.csv')",
+							"type": "Expression"
+						}
 					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
