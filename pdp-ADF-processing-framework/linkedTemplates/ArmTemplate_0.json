@@ -23,9 +23,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
+		"HDInsightlinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'HDInsightlinkedService'"
+		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
+		},
+		"HDInsightlinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admin"
 		},
 		"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
 			"type": "string",
@@ -72,7 +80,9 @@
 								"Subject": "@{pipeline().parameters.Subject}",
 								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 								"EmailTo": "@pipeline().parameters.EmailTo"
-							}
+							},
+							"linkedServices": [],
+							"datasets": []
 						}
 					}
 				],
@@ -222,6 +232,32 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/HDInsightlinkedService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HDInsight",
+				"typeProperties": {
+					"clusterUri": "https://pradeephdinsight.azurehdinsight.net",
+					"userName": "[parameters('HDInsightlinkedService_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('HDInsightlinkedService_password')]"
+					},
+					"isEspEnabled": false,
+					"fileSystem": "source",
+					"linkedServiceName": {
+						"referenceName": "BlobLinkedservice",
+						"type": "LinkedServiceReference"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Stage1-Workflow')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -325,6 +361,40 @@
 								}
 							}
 						}
+					},
+					{
+						"name": "Hive_Processing",
+						"type": "HDInsightHive",
+						"dependsOn": [
+							{
+								"activity": "ParameterLookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"scriptPath": "hql/hivescript.hql",
+							"defines": {
+								"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
+							},
+							"scriptLinkedService": {
+								"referenceName": "BlobLinkedservice",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "HDInsightlinkedService",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"parameters": {
@@ -342,7 +412,9 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/SanityAzureFunction')]",
 				"[concat(variables('factoryId'), '/datasets/ParmDS')]",
-				"[concat(variables('factoryId'), '/pipelines/Email_Trigger')]"
+				"[concat(variables('factoryId'), '/pipelines/Email_Trigger')]",
+				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
+				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
 			]
 		},
 		{
