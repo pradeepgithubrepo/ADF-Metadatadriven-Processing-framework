@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
 					"defines": {
-						"loadingdate": "2020-12-20"
+						"srcfilelocation": "abfss://pharmacypoc@yuhaadlspoc.dfs.core.windows.net/source/cases/total_cases.csv"
 					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
