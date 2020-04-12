@@ -121,7 +121,18 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"scriptPath": ""
+					"scriptPath": "hql/hivescript.hql",
+					"defines": {
+						"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
+					},
+					"scriptLinkedService": {
+						"referenceName": "BlobLinkedservice",
+						"type": "LinkedServiceReference"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "HDInsightlinkedService",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
