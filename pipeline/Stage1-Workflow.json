@@ -52,27 +52,33 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
+				"userProperties": []
+			},
+			{
+				"name": "Email_Trigger",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "SanityCheck",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+					"pipeline": {
+						"referenceName": "Email_Trigger",
+						"type": "PipelineReference"
 					},
-					"dataset": {
-						"referenceName": "ParmDS",
-						"type": "DatasetReference",
-						"parameters": {
-							"filecontainer": "@activity('SanityCheck').output.map.parmcontainer",
-							"filepath": "@activity('SanityCheck').output.map.parmloc"
+					"waitOnCompletion": true,
+					"parameters": {
+						"Subject": "Data-factory Pipeline Failed",
+						"ErrorMessage": {
+							"value": "@activity('SanityCheck').Error.Message",
+							"type": "Expression"
 						}
-					},
-					"firstRowOnly": true
+					}
 				}
 			}
 		],
