@@ -452,7 +452,7 @@
 						"value": "[parameters('HDInsightlinkedService_password')]"
 					},
 					"isEspEnabled": false,
-					"fileSystem": "source",
+					"fileSystem": "log",
 					"linkedServiceName": {
 						"referenceName": "BlobLinkedservice",
 						"type": "LinkedServiceReference"
