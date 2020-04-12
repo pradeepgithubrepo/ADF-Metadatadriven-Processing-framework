@@ -80,9 +80,7 @@
 								"Subject": "@{pipeline().parameters.Subject}",
 								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 								"EmailTo": "@pipeline().parameters.EmailTo"
-							},
-							"linkedServices": [],
-							"datasets": []
+							}
 						}
 					}
 				],
@@ -382,7 +380,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"scriptPath": "hql/hivescript.hql",
+							"scriptPath": "parameterfiles/parm_death.csv",
 							"defines": {
 								"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
 							},
@@ -413,8 +411,8 @@
 				"[concat(variables('factoryId'), '/linkedServices/SanityAzureFunction')]",
 				"[concat(variables('factoryId'), '/datasets/ParmDS')]",
 				"[concat(variables('factoryId'), '/pipelines/Email_Trigger')]",
-				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
-				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
+				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]",
+				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]"
 			]
 		},
 		{
@@ -496,13 +494,54 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/test_dummy')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Hive1",
+						"type": "HDInsightHive",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"scriptPath": "hql/hivescript.hql",
+							"defines": {
+								"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
+							},
+							"scriptLinkedService": {
+								"referenceName": "BlobLinkedservice",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "HDInsightlinkedService",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
+				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/source-trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"description": "Trigger to kick of when a vendor file is received.",
 				"annotations": [],
-				"runtimeState": "Started",
+				"runtimeState": "Stopped",
 				"pipelines": [
 					{
 						"pipelineReference": {

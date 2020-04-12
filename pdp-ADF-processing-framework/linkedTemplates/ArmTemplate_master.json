@@ -15,6 +15,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
+		"HDInsightlinkedService_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'HDInsightlinkedService'"
+		},
 		"SanityAzureFunction_functionKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'functionKey' of 'SanityAzureFunction'"
@@ -23,13 +27,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
-		"HDInsightlinkedService_password": {
-			"type": "secureString",
-			"metadata": "Secure string for 'password' of 'HDInsightlinkedService'"
-		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
+		},
+		"HDInsightlinkedService_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "admin"
 		},
 		"source-trigger_properties_Stage1-Workflow_parameters_sourcefile": {
 			"type": "string",
@@ -42,10 +46,6 @@
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"HDInsightlinkedService_properties_typeProperties_userName": {
-			"type": "string",
-			"defaultValue": "admin"
 		},
 		"containerUri": {
 			"type": "string",
