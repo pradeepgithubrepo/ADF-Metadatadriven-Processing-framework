@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
 					"defines": {
-						"srcfilelocation": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/total_cases.csv",
+						"srcfilelocation": "abfss://pharmacypoc@yuhaadlspoc.dfs.core.windows.net/source/cases/total_cases.csv",
 						"loadingdate": {
 							"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
 							"type": "Expression"
