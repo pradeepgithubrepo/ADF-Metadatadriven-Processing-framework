@@ -102,9 +102,16 @@
 				}
 			},
 			{
-				"name": "Hive1",
+				"name": "Hive_Processing",
 				"type": "HDInsightHive",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "ParameterLookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
