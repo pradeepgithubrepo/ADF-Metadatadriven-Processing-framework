@@ -15,13 +15,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
-		"scriptlinkedservice_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
-		},
 		"SanityAzureFunction_functionKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'functionKey' of 'SanityAzureFunction'"
+		},
+		"scriptlinkedservice_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
@@ -72,11 +72,11 @@
 					"BlobLinkedservice_accountKey": {
 						"value": "[parameters('BlobLinkedservice_accountKey')]"
 					},
-					"scriptlinkedservice_connectionString": {
-						"value": "[parameters('scriptlinkedservice_connectionString')]"
-					},
 					"SanityAzureFunction_functionKey": {
 						"value": "[parameters('SanityAzureFunction_functionKey')]"
+					},
+					"scriptlinkedservice_connectionString": {
+						"value": "[parameters('scriptlinkedservice_connectionString')]"
 					},
 					"BlobLinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('BlobLinkedservice_properties_typeProperties_url')]"

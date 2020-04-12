@@ -11,10 +11,10 @@
 		"BlobLinkedservice_accountKey": {
 			"value": ""
 		},
-		"scriptlinkedservice_connectionString": {
+		"SanityAzureFunction_functionKey": {
 			"value": ""
 		},
-		"SanityAzureFunction_functionKey": {
+		"scriptlinkedservice_connectionString": {
 			"value": ""
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {

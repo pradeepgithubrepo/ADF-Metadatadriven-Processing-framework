@@ -15,13 +15,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'BlobLinkedservice'"
 		},
-		"scriptlinkedservice_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
-		},
 		"SanityAzureFunction_functionKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'functionKey' of 'SanityAzureFunction'"
+		},
+		"scriptlinkedservice_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
@@ -44,6 +44,53 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Email_Trigger')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Emailtrig_activity",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-18.southeastasia.logic.azure.com:443/workflows/4d2d87193d9249209f2c5379909f6735/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=FVvtH47DlXlcAuQDf4sb6PStexQOWzD_Q_2QpXB3vts",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"DataFactoryName": "@{pipeline().DataFactory}",
+								"PipelineName": "@{pipeline().Pipeline}",
+								"Subject": "@{pipeline().parameters.Subject}",
+								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
+								"EmailTo": "@pipeline().parameters.EmailTo"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"EmailTo": {
+						"type": "string"
+					},
+					"ErrorMessage": {
+						"type": "string"
+					},
+					"Subject": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/AzureBlobStoragelinkedservice')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -75,19 +122,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/scriptlinkedservice')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/SanityAzureFunction')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -100,6 +134,19 @@
 						"type": "SecureString",
 						"value": "[parameters('SanityAzureFunction_functionKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/scriptlinkedservice')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -172,6 +219,130 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stage1-Workflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SanityCheck",
+						"type": "AzureFunctionActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"functionName": "BlobValidator",
+							"method": "GET",
+							"headers": {
+								"containername": {
+									"value": "@pipeline().parameters.sourcepath",
+									"type": "Expression"
+								},
+								"filename": {
+									"value": "@pipeline().parameters.sourcefile",
+									"type": "Expression"
+								}
+							},
+							"body": ""
+						},
+						"linkedServiceName": {
+							"referenceName": "SanityAzureFunction",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ParameterLookup",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SanityCheck",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ParmDS",
+								"type": "DatasetReference",
+								"parameters": {
+									"filecontainer": "@activity('SanityCheck').output.map.parmcontainer",
+									"filepath": "@activity('SanityCheck').output.map.parmloc"
+								}
+							}
+						}
+					},
+					{
+						"name": "Email_Trigger",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SanityCheck",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Email_Trigger",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Subject": "Data-factory Pipeline Failed",
+								"ErrorMessage": {
+									"value": "@activity('SanityCheck').Error.Message",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"parameters": {
+					"sourcefile": {
+						"type": "string",
+						"defaultValue": "tmpsrcfile"
+					},
+					"sourcepath": {
+						"type": "string",
+						"defaultValue": "tmpsrcpath"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SanityAzureFunction')]",
+				"[concat(variables('factoryId'), '/datasets/ParmDS')]",
+				"[concat(variables('factoryId'), '/pipelines/Email_Trigger')]"
 			]
 		},
 		{
@@ -250,103 +421,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ParmDS')]",
 				"[concat(variables('factoryId'), '/datasets/destDS')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Stage1-Workflow')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "SanityCheck",
-						"type": "AzureFunctionActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"functionName": "BlobValidator",
-							"method": "GET",
-							"headers": {
-								"containername": {
-									"value": "@pipeline().parameters.sourcepath",
-									"type": "Expression"
-								},
-								"filename": {
-									"value": "@pipeline().parameters.sourcefile",
-									"type": "Expression"
-								}
-							},
-							"body": ""
-						},
-						"linkedServiceName": {
-							"referenceName": "SanityAzureFunction",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "ParameterLookup",
-						"type": "Lookup",
-						"dependsOn": [
-							{
-								"activity": "SanityCheck",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "DelimitedTextSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true
-								},
-								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
-								}
-							},
-							"dataset": {
-								"referenceName": "ParmDS",
-								"type": "DatasetReference",
-								"parameters": {
-									"filecontainer": "@activity('SanityCheck').output.map.parmcontainer",
-									"filepath": "@activity('SanityCheck').output.map.parmloc"
-								}
-							},
-							"firstRowOnly": true
-						}
-					}
-				],
-				"parameters": {
-					"sourcefile": {
-						"type": "string",
-						"defaultValue": "tmpsrcfile"
-					},
-					"sourcepath": {
-						"type": "string",
-						"defaultValue": "tmpsrcpath"
-					}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/SanityAzureFunction')]",
-				"[concat(variables('factoryId'), '/datasets/ParmDS')]"
 			]
 		},
 		{
