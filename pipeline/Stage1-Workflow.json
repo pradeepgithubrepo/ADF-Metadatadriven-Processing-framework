@@ -121,7 +121,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"scriptPath": "hql/hivescript.hql",
+					"scriptPath": "parameterfiles/parm_death.csv",
 					"defines": {
 						"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
 					},
