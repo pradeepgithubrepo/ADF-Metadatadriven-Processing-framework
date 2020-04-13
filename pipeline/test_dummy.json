@@ -16,6 +16,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
+					"defines": {
+						"loadingdate": "2020-10-10"
+					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
 						"type": "LinkedServiceReference"
