@@ -17,7 +17,8 @@
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
 					"defines": {
-						"loadingdate": "2020-10-10"
+						"srclocation": "abfss://source@pradeepdatalake.dfs.core.windows.net/activeinfections/total_cases.csv",
+						"loadingdate": "2020-10-09"
 					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
