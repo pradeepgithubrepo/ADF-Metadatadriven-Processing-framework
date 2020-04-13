@@ -16,9 +16,6 @@
 				"userProperties": [],
 				"typeProperties": {
 					"scriptPath": "hql/infectcase.hql",
-					"defines": {
-						"srcfilelocation": "abfss://log@pradeepdatalake.blob.core.windows.net/source/total_cases.csv"
-					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
 						"type": "LinkedServiceReference"
