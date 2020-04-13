@@ -224,9 +224,15 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"scriptPath": "hql/infectcase.hql",
+							"scriptPath": {
+								"value": "@activity('ParameterLookup').output.firstRow.hqlloc",
+								"type": "Expression"
+							},
 							"defines": {
-								"srclocation": "abfss://source@pradeepdatalake.dfs.core.windows.net/activeinfections/total_cases.csv",
+								"srclocation": {
+									"value": "@concat(activity('ParameterLookup').output.firstRow.hivetarget,activity('SanityCheck').output.map.filename)",
+									"type": "Expression"
+								},
 								"loadingdate": {
 									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
 									"type": "Expression"
