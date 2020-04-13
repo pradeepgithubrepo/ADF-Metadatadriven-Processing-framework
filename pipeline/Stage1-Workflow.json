@@ -121,9 +121,13 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"scriptPath": "parameterfiles/parm_death.csv",
+					"scriptPath": "hql/infectcase.hql",
 					"defines": {
-						"Output": "abfss://source@pradeepdatalake.blob.core.windows.net/activeinfections/*"
+						"srclocation": "abfss://source@pradeepdatalake.dfs.core.windows.net/activeinfections/total_cases.csv",
+						"loadingdate": {
+							"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+							"type": "Expression"
+						}
 					},
 					"scriptLinkedService": {
 						"referenceName": "BlobLinkedservice",
