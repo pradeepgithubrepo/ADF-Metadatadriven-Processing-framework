@@ -3,7 +3,7 @@
 	"properties": {
 		"description": "Trigger to kick of when a vendor file is received.",
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
