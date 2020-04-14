@@ -16,6 +16,17 @@
 				"userProperties": []
 			}
 		],
+		"parameters": {
+			"trigger_hivelocation": {
+				"type": "string"
+			},
+			"trigger_partition": {
+				"type": "string"
+			},
+			"trigger_target": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
