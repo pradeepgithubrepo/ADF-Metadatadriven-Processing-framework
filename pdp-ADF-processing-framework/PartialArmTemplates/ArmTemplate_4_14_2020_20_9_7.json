@@ -1,0 +1,218 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "pdp-ADF-processing-framework"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Stage1-Workflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "SanityCheck",
+						"type": "AzureFunctionActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"functionName": "BlobValidator",
+							"method": "GET",
+							"headers": {
+								"containername": {
+									"value": "@pipeline().parameters.sourcepath",
+									"type": "Expression"
+								},
+								"filename": {
+									"value": "@pipeline().parameters.sourcefile",
+									"type": "Expression"
+								}
+							},
+							"body": ""
+						},
+						"linkedServiceName": {
+							"referenceName": "SanityAzureFunction",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ParameterLookup",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "SanityCheck",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ParmDS",
+								"type": "DatasetReference",
+								"parameters": {
+									"filecontainer": "@activity('SanityCheck').output.map.parmcontainer",
+									"filepath": "@activity('SanityCheck').output.map.parmloc"
+								}
+							}
+						}
+					},
+					{
+						"name": "Email_Trigger",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "SanityCheck",
+								"dependencyConditions": [
+									"Failed"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Email_Trigger",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Subject": "Data-factory Pipeline Failed",
+								"ErrorMessage": {
+									"value": "@activity('SanityCheck').Error.Message",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					{
+						"name": "Hive_Processing",
+						"type": "HDInsightHive",
+						"dependsOn": [
+							{
+								"activity": "ParameterLookup",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"scriptPath": {
+								"value": "@activity('ParameterLookup').output.firstRow.hqlloc",
+								"type": "Expression"
+							},
+							"defines": {
+								"srclocation": {
+									"value": "@concat(activity('ParameterLookup').output.firstRow.hivetarget,activity('SanityCheck').output.map.filename)",
+									"type": "Expression"
+								},
+								"loadingdate": {
+									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+									"type": "Expression"
+								}
+							},
+							"scriptLinkedService": {
+								"referenceName": "BlobLinkedservice",
+								"type": "LinkedServiceReference"
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "HDInsightlinkedService",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Trigger",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Hive_Processing",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Trigger",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"trigger_hivelocation": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_hivelocation",
+									"type": "Expression"
+								},
+								"trigger_partition": {
+									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+									"type": "Expression"
+								},
+								"trigger_target": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_target",
+									"type": "Expression"
+								},
+								"trigger_loc": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_loc",
+									"type": "Expression"
+								}
+							}
+						}
+					}
+				],
+				"parameters": {
+					"sourcefile": {
+						"type": "string",
+						"defaultValue": "tmpsrcfile"
+					},
+					"sourcepath": {
+						"type": "string",
+						"defaultValue": "tmpsrcpath"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}

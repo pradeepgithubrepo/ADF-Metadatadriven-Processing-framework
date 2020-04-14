@@ -80,7 +80,9 @@
 								"Subject": "@{pipeline().parameters.Subject}",
 								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 								"EmailTo": "@pipeline().parameters.EmailTo"
-							}
+							},
+							"linkedServices": [],
+							"datasets": []
 						}
 					}
 				],
@@ -272,7 +274,7 @@
 									"type": "Expression"
 								},
 								"trigger_partition": {
-									"value": "@activity('Hive_Processing').input.defines.loadingdate",
+									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
 									"type": "Expression"
 								},
 								"trigger_target": {
