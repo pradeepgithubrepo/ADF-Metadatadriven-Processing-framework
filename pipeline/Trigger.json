@@ -35,6 +35,9 @@
 			},
 			"trigger_target": {
 				"type": "string"
+			},
+			"trigger_loc": {
+				"type": "string"
 			}
 		},
 		"annotations": []
