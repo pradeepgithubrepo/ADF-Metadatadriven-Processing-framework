@@ -477,11 +477,15 @@
 									"type": "Expression"
 								},
 								"trigger_partition": {
-									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+									"value": "@activity('Hive_Processing').input.defines.loadingdate",
 									"type": "Expression"
 								},
 								"trigger_target": {
 									"value": "@activity('ParameterLookup').output.firstRow.trigger_target",
+									"type": "Expression"
+								},
+								"trigger_loc": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_loc",
 									"type": "Expression"
 								}
 							}
