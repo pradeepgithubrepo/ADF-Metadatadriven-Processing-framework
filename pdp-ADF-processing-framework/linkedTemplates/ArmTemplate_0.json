@@ -80,9 +80,7 @@
 								"Subject": "@{pipeline().parameters.Subject}",
 								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 								"EmailTo": "@pipeline().parameters.EmailTo"
-							},
-							"linkedServices": [],
-							"datasets": []
+							}
 						}
 					}
 				],
@@ -94,6 +92,55 @@
 						"type": "string"
 					},
 					"Subject": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Trigger')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Trigger_filecrt",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-31.southeastasia.logic.azure.com:443/workflows/d0cd670048a04e8dba103f5cc25aee99/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oRHl7k7AMFYQsmrTtEVtOh9_Oy8S9oYivY6SH-dMAU4",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"trigger_hivelocation": "@{pipeline().parameters.trigger_hivelocation}",
+								"trigger_loc": "@{pipeline().parameters.trigger_loc}",
+								"trigger_partition": "@{pipeline().parameters.trigger_partition}",
+								"trigger_target": "@{pipeline().parameters.trigger_target}"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"trigger_hivelocation": {
+						"type": "string"
+					},
+					"trigger_partition": {
+						"type": "string"
+					},
+					"trigger_target": {
+						"type": "string"
+					},
+					"trigger_loc": {
 						"type": "string"
 					}
 				},
@@ -158,55 +205,6 @@
 				"typeProperties": {
 					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
 				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Trigger')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Trigger_filecrt",
-						"type": "WebActivity",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-31.southeastasia.logic.azure.com:443/workflows/d0cd670048a04e8dba103f5cc25aee99/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oRHl7k7AMFYQsmrTtEVtOh9_Oy8S9oYivY6SH-dMAU4",
-							"method": "POST",
-							"headers": {},
-							"body": {
-								"trigger_hivelocation": "@{pipeline().parameters.trigger_hivelocation}",
-								"trigger_loc": "@{pipeline().parameters.trigger_loc}",
-								"trigger_partition": "@{pipeline().parameters.trigger_partition}",
-								"trigger_target": "@{pipeline().parameters.trigger_target}"
-							}
-						}
-					}
-				],
-				"parameters": {
-					"trigger_hivelocation": {
-						"type": "string"
-					},
-					"trigger_partition": {
-						"type": "string"
-					},
-					"trigger_target": {
-						"type": "string"
-					},
-					"trigger_loc": {
-						"type": "string"
-					}
-				},
-				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -479,7 +477,7 @@
 									"type": "Expression"
 								},
 								"trigger_partition": {
-									"value": "@activity('Hive_Processing').input.defines.loadingdate",
+									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
 									"type": "Expression"
 								},
 								"trigger_target": {
