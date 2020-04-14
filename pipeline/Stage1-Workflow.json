@@ -144,6 +144,40 @@
 					"referenceName": "HDInsightlinkedService",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "Trigger",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Hive_Processing",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Trigger",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"trigger_hivelocation": {
+							"value": "@activity('ParameterLookup').output.firstRow.trigger_hivelocation",
+							"type": "Expression"
+						},
+						"trigger_partition": {
+							"value": "@activity('Hive_Processing').input.defines.loadingdate",
+							"type": "Expression"
+						},
+						"trigger_target": {
+							"value": "@activity('ParameterLookup').output.firstRow.trigger_target",
+							"type": "Expression"
+						}
+					}
+				}
 			}
 		],
 		"parameters": {
