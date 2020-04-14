@@ -16,7 +16,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"url": "https://prod-31.southeastasia.logic.azure.com:443/workflows/d0cd670048a04e8dba103f5cc25aee99/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oRHl7k7AMFYQsmrTtEVtOh9_Oy8S9oYivY6SH-dMAU4",
-					"method": "POST"
+					"method": "POST",
+					"body": {
+						"trigger_hivelocation": "@{pipeline().parameters.trigger_hivelocation}",
+						"trigger_loc": "@{pipeline().parameters.trigger_loc}",
+						"trigger_partition": "@{pipeline().parameters.trigger_partition}",
+						"trigger_target": "@{pipeline().parameters.trigger_target}"
+					}
 				}
 			}
 		],
