@@ -80,7 +80,9 @@
 								"Subject": "@{pipeline().parameters.Subject}",
 								"ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
 								"EmailTo": "@pipeline().parameters.EmailTo"
-							}
+							},
+							"linkedServices": [],
+							"datasets": []
 						}
 					}
 				],
@@ -156,6 +158,55 @@
 				"typeProperties": {
 					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
 				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Trigger')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Trigger_filecrt",
+						"type": "WebActivity",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-31.southeastasia.logic.azure.com:443/workflows/d0cd670048a04e8dba103f5cc25aee99/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=oRHl7k7AMFYQsmrTtEVtOh9_Oy8S9oYivY6SH-dMAU4",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"trigger_hivelocation": "@{pipeline().parameters.trigger_hivelocation}",
+								"trigger_loc": "@{pipeline().parameters.trigger_loc}",
+								"trigger_partition": "@{pipeline().parameters.trigger_partition}",
+								"trigger_target": "@{pipeline().parameters.trigger_target}"
+							}
+						}
+					}
+				],
+				"parameters": {
+					"trigger_hivelocation": {
+						"type": "string"
+					},
+					"trigger_partition": {
+						"type": "string"
+					},
+					"trigger_target": {
+						"type": "string"
+					},
+					"trigger_loc": {
+						"type": "string"
+					}
+				},
+				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -237,7 +288,7 @@
 				"annotations": [],
 				"type": "HDInsight",
 				"typeProperties": {
-					"clusterUri": "https://pradeephdinsight.azurehdinsight.net",
+					"clusterUri": "https://pradeepsparkcluster.azurehdinsight.net",
 					"userName": "[parameters('HDInsightlinkedService_properties_typeProperties_userName')]",
 					"password": {
 						"type": "SecureString",
@@ -403,6 +454,40 @@
 							"referenceName": "HDInsightlinkedService",
 							"type": "LinkedServiceReference"
 						}
+					},
+					{
+						"name": "Trigger",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Hive_Processing",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Trigger",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"trigger_hivelocation": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_hivelocation",
+									"type": "Expression"
+								},
+								"trigger_partition": {
+									"value": "@activity('Hive_Processing').input.defines.loadingdate",
+									"type": "Expression"
+								},
+								"trigger_target": {
+									"value": "@activity('ParameterLookup').output.firstRow.trigger_target",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"parameters": {
@@ -422,7 +507,8 @@
 				"[concat(variables('factoryId'), '/datasets/ParmDS')]",
 				"[concat(variables('factoryId'), '/pipelines/Email_Trigger')]",
 				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]",
-				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]"
+				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
+				"[concat(variables('factoryId'), '/pipelines/Trigger')]"
 			]
 		},
 		{
