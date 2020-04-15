@@ -27,7 +27,17 @@
 					},
 					"dataset": {
 						"referenceName": "stagedest",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"filecontainer": {
+								"value": "@pipeline().parameters.triggerfolder",
+								"type": "Expression"
+							},
+							"filepath": {
+								"value": "@pipeline().parameters.triggerfile",
+								"type": "Expression"
+							}
+						}
 					}
 				}
 			}
