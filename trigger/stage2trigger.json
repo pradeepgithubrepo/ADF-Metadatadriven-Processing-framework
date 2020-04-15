@@ -6,7 +6,7 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "Curationprocessor",
+					"referenceName": "stage2-workflow",
 					"type": "PipelineReference"
 				},
 				"parameters": {
