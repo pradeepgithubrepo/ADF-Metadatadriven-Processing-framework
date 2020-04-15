@@ -523,7 +523,7 @@
 									"type": "Expression"
 								},
 								"trigger_partition": {
-									"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
+									"value": "@concat('load_date=',formatDateTime(utcnow(),'yyyy-MM-dd'))",
 									"type": "Expression"
 								},
 								"trigger_target": {
