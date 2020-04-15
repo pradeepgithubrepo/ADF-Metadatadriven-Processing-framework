@@ -23,6 +23,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
+		"AzureSparkstorageacctLS_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'AzureSparkstorageacctLS'"
+		},
 		"HDInsightlinkedService_password": {
 			"type": "secureString",
 			"metadata": "Secure string for 'password' of 'HDInsightlinkedService'"
@@ -30,6 +34,10 @@
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
+		},
+		"AzureSparkstorageacctLS_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://pradeepsparkstorageact.dfs.core.windows.net"
 		},
 		"HDInsightlinkedService_properties_typeProperties_userName": {
 			"type": "string",
@@ -218,6 +226,23 @@
 				"type": "AzureBlobStorage",
 				"typeProperties": {
 					"connectionString": "[parameters('scriptlinkedservice_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSparkstorageacctLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('AzureSparkstorageacctLS_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureSparkstorageacctLS_accountKey')]"
+					}
 				}
 			},
 			"dependsOn": []
@@ -652,7 +677,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"rootPath": "jars",
+							"rootPath": "jar",
 							"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 							"arguments": [
 								"@activity('parmlookup').output.firstRow.Prop_0",
@@ -666,7 +691,7 @@
 								"spark.driver.memory": "1g"
 							},
 							"sparkJobLinkedService": {
-								"referenceName": "BlobLinkedservice",
+								"referenceName": "AzureSparkstorageacctLS",
 								"type": "LinkedServiceReference"
 							}
 						},
@@ -691,7 +716,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/stagedest')]",
 				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
-				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedservice')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSparkstorageacctLS')]"
 			]
 		},
 		{

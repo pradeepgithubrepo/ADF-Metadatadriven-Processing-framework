@@ -20,6 +20,9 @@
 		"scriptlinkedservice_connectionString": {
 			"value": ""
 		},
+		"AzureSparkstorageacctLS_accountKey": {
+			"value": ""
+		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"value": "https://pradeepdatalake.dfs.core.windows.net"
 		},
@@ -43,6 +46,9 @@
 		},
 		"stage2trigger_properties_typeProperties_scope": {
 			"value": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
+		},
+		"AzureSparkstorageacctLS_properties_typeProperties_url": {
+			"value": "https://pradeepsparkstorageact.dfs.core.windows.net"
 		}
 	}
 }
