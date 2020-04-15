@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"rootPath": "jar",
+					"rootPath": "sparkjars",
 					"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 					"arguments": [
 						"abfss://raw@pradeepdatalake.dfs.core.windows.net/target/cases",
@@ -24,7 +24,7 @@
 					],
 					"className": "com.prad.legend.blooper",
 					"sparkJobLinkedService": {
-						"referenceName": "AzureSparkstorageacctLS",
+						"referenceName": "ADFBlobLinkedService",
 						"type": "LinkedServiceReference"
 					}
 				},
