@@ -659,7 +659,12 @@
 								"@activity('parmlookup').output.firstRow.Prop_2",
 								"@activity('parmlookup').output.firstRow.Prop_1"
 							],
+							"getDebugInfo": "Always",
 							"className": "com.prad.legend.blooper",
+							"sparkConfig": {
+								"spark.driver.cores": "2",
+								"spark.driver.memory": "1g"
+							},
 							"sparkJobLinkedService": {
 								"referenceName": "BlobLinkedservice",
 								"type": "LinkedServiceReference"
