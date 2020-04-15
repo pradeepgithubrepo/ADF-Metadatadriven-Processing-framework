@@ -61,7 +61,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"rootPath": "jar",
+					"rootPath": "sparkjars",
 					"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 					"arguments": [
 						"@activity('parmlookup').output.firstRow.Prop_0",
@@ -75,7 +75,7 @@
 						"spark.driver.memory": "1g"
 					},
 					"sparkJobLinkedService": {
-						"referenceName": "AzureSparkstorageacctLS",
+						"referenceName": "ADFBlobLinkedService",
 						"type": "LinkedServiceReference"
 					}
 				},
