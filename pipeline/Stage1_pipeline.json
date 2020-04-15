@@ -52,7 +52,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "destDS",
+						"referenceName": "stagedest",
 						"type": "DatasetReference"
 					}
 				]
