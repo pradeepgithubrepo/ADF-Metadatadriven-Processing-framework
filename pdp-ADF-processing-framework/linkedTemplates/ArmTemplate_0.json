@@ -46,6 +46,18 @@
 		"source-trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
+		},
+		"stage2trigger_properties_Stage2 workflow_parameters_triggerfolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"stage2trigger_properties_Stage2 workflow_parameters_triggerfile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"stage2trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
 		}
 	},
 	"variables": {
@@ -639,6 +651,68 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/Stage2 workflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "parmlookup",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ParmDS",
+								"type": "DatasetReference",
+								"parameters": {
+									"filecontainer": {
+										"value": "@pipeline().parameters.triggerfolder",
+										"type": "Expression"
+									},
+									"filepath": {
+										"value": "@pipeline().parameters.triggerfile",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					}
+				],
+				"parameters": {
+					"triggerfolder": {
+						"type": "string",
+						"defaultValue": "defailtval"
+					},
+					"triggerfile": {
+						"type": "string",
+						"defaultValue": "defailtval"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ParmDS')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/source-trigger')]",
 			"type": "Microsoft.DataFactory/factories/triggers",
 			"apiVersion": "2018-06-01",
@@ -670,6 +744,39 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/Stage1-Workflow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/stage2trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Stage2 workflow",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"triggerfolder": "[parameters('stage2trigger_properties_Stage2 workflow_parameters_triggerfolder')]",
+							"triggerfile": "[parameters('stage2trigger_properties_Stage2 workflow_parameters_triggerfile')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/triggers/blobs/stage2/",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('stage2trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Stage2 workflow')]"
 			]
 		}
 	]

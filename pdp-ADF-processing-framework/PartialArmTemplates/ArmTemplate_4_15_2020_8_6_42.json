@@ -1,0 +1,109 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "pdp-ADF-processing-framework"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/stage2trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "Stage2 workflow",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"triggerfolder": "@triggerBody().folderPath",
+							"triggerfile": "@triggerBody().fileName"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/triggers/blobs/stage2/",
+					"ignoreEmptyBlobs": true,
+					"scope": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/Stage2 workflow')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Stage2 workflow')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "parmlookup",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ParmDS",
+								"type": "DatasetReference",
+								"parameters": {
+									"filecontainer": {
+										"value": "@pipeline().parameters.triggerfolder",
+										"type": "Expression"
+									},
+									"filepath": {
+										"value": "@pipeline().parameters.triggerfile",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					}
+				],
+				"parameters": {
+					"triggerfolder": {
+						"type": "string",
+						"defaultValue": "defailtval"
+					},
+					"triggerfile": {
+						"type": "string",
+						"defaultValue": "defailtval"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}

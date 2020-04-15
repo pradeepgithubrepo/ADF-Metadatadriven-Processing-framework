@@ -47,6 +47,18 @@
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
 		},
+		"stage2trigger_properties_Stage2 workflow_parameters_triggerfolder": {
+			"type": "string",
+			"defaultValue": "@triggerBody().folderPath"
+		},
+		"stage2trigger_properties_Stage2 workflow_parameters_triggerfile": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"stage2trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -103,6 +115,15 @@
 					},
 					"source-trigger_properties_typeProperties_scope": {
 						"value": "[parameters('source-trigger_properties_typeProperties_scope')]"
+					},
+					"stage2trigger_properties_Stage2 workflow_parameters_triggerfolder": {
+						"value": "[parameters('stage2trigger_properties_Stage2 workflow_parameters_triggerfolder')]"
+					},
+					"stage2trigger_properties_Stage2 workflow_parameters_triggerfile": {
+						"value": "[parameters('stage2trigger_properties_Stage2 workflow_parameters_triggerfile')]"
+					},
+					"stage2trigger_properties_typeProperties_scope": {
+						"value": "[parameters('stage2trigger_properties_typeProperties_scope')]"
 					}
 				}
 			},
