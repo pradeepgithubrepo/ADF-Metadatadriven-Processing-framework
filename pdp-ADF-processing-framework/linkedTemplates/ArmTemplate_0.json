@@ -23,9 +23,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
-		"AzureSparkstorageacctLS_accountKey": {
+		"ADFBlobLinkedService_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'AzureSparkstorageacctLS'"
+			"metadata": "Secure string for 'connectionString' of 'ADFBlobLinkedService'"
 		},
 		"HDInsightlinkedService_password": {
 			"type": "secureString",
@@ -34,10 +34,6 @@
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pradeepdatalake.dfs.core.windows.net"
-		},
-		"AzureSparkstorageacctLS_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://pradeepsparkstorageact.dfs.core.windows.net"
 		},
 		"HDInsightlinkedService_properties_typeProperties_userName": {
 			"type": "string",
@@ -231,18 +227,14 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureSparkstorageacctLS')]",
+			"name": "[concat(parameters('factoryName'), '/ADFBlobLinkedService')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureBlobFS",
+				"type": "AzureBlobStorage",
 				"typeProperties": {
-					"url": "[parameters('AzureSparkstorageacctLS_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('AzureSparkstorageacctLS_accountKey')]"
-					}
+					"connectionString": "[parameters('ADFBlobLinkedService_connectionString')]"
 				}
 			},
 			"dependsOn": []
@@ -586,7 +578,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"rootPath": "processingjar",
+							"rootPath": "sparkjars",
 							"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 							"arguments": [
 								"abfss://raw@pradeepdatalake.dfs.core.windows.net/target/cases",
@@ -595,7 +587,7 @@
 							],
 							"className": "com.prad.legend.blooper",
 							"sparkJobLinkedService": {
-								"referenceName": "AzureBlobStoragelinkedservice",
+								"referenceName": "ADFBlobLinkedService",
 								"type": "LinkedServiceReference"
 							}
 						},
@@ -609,7 +601,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureBlobStoragelinkedservice')]"
+				"[concat(variables('factoryId'), '/linkedServices/ADFBlobLinkedService')]"
 			]
 		},
 		{
@@ -677,7 +669,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"rootPath": "jar",
+							"rootPath": "sparkjars",
 							"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 							"arguments": [
 								"@activity('parmlookup').output.firstRow.Prop_0",
@@ -691,7 +683,7 @@
 								"spark.driver.memory": "1g"
 							},
 							"sparkJobLinkedService": {
-								"referenceName": "AzureSparkstorageacctLS",
+								"referenceName": "ADFBlobLinkedService",
 								"type": "LinkedServiceReference"
 							}
 						},
@@ -716,7 +708,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/stagedest')]",
 				"[concat(variables('factoryId'), '/linkedServices/HDInsightlinkedService')]",
-				"[concat(variables('factoryId'), '/linkedServices/AzureSparkstorageacctLS')]"
+				"[concat(variables('factoryId'), '/linkedServices/ADFBlobLinkedService')]"
 			]
 		},
 		{

@@ -27,9 +27,9 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'scriptlinkedservice'"
 		},
-		"AzureSparkstorageacctLS_accountKey": {
+		"ADFBlobLinkedService_connectionString": {
 			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'AzureSparkstorageacctLS'"
+			"metadata": "Secure string for 'connectionString' of 'ADFBlobLinkedService'"
 		},
 		"BlobLinkedservice_properties_typeProperties_url": {
 			"type": "string",
@@ -62,10 +62,6 @@
 		"stage2trigger_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/4252b742-3cd4-47a1-af43-30bb66d77529/resourceGroups/pradeep/providers/Microsoft.Storage/storageAccounts/pradeepdatalake"
-		},
-		"AzureSparkstorageacctLS_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://pradeepsparkstorageact.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -106,17 +102,14 @@
 					"scriptlinkedservice_connectionString": {
 						"value": "[parameters('scriptlinkedservice_connectionString')]"
 					},
-					"AzureSparkstorageacctLS_accountKey": {
-						"value": "[parameters('AzureSparkstorageacctLS_accountKey')]"
+					"ADFBlobLinkedService_connectionString": {
+						"value": "[parameters('ADFBlobLinkedService_connectionString')]"
 					},
 					"HDInsightlinkedService_password": {
 						"value": "[parameters('HDInsightlinkedService_password')]"
 					},
 					"BlobLinkedservice_properties_typeProperties_url": {
 						"value": "[parameters('BlobLinkedservice_properties_typeProperties_url')]"
-					},
-					"AzureSparkstorageacctLS_properties_typeProperties_url": {
-						"value": "[parameters('AzureSparkstorageacctLS_properties_typeProperties_url')]"
 					},
 					"HDInsightlinkedService_properties_typeProperties_userName": {
 						"value": "[parameters('HDInsightlinkedService_properties_typeProperties_userName')]"
