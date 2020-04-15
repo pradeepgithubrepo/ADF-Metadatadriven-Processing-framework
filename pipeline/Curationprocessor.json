@@ -1,5 +1,5 @@
 {
-	"name": "Stage2 workflow",
+	"name": "Curationprocessor",
 	"properties": {
 		"activities": [
 			{
@@ -39,6 +39,44 @@
 							}
 						}
 					}
+				}
+			},
+			{
+				"name": "Spark1",
+				"type": "HDInsightSpark",
+				"dependsOn": [
+					{
+						"activity": "parmlookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"rootPath": "jars",
+					"entryFilePath": "sample-1.0-SNAPSHOT.jar",
+					"arguments": [
+						"@activity('parmlookup').output.firstRow.Prop_0",
+						"@activity('parmlookup').output.firstRow.Prop_2",
+						"@activity('parmlookup').output.firstRow.Prop_1"
+					],
+					"className": "com.prad.legend.blooper",
+					"sparkJobLinkedService": {
+						"referenceName": "BlobLinkedservice",
+						"type": "LinkedServiceReference"
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "HDInsightlinkedService",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
