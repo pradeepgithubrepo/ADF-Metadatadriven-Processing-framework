@@ -15,7 +15,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"rootPath": "jars",
+					"rootPath": "log/jars",
 					"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 					"sparkJobLinkedService": {
 						"referenceName": "BlobLinkedservice",
