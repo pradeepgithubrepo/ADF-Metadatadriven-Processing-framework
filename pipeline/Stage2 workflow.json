@@ -1,6 +1,16 @@
 {
 	"name": "Stage2 workflow",
 	"properties": {
+		"parameters": {
+			"triggerfolder": {
+				"type": "string",
+				"defaultValue": "defailtval"
+			},
+			"triggerfile": {
+				"type": "string",
+				"defaultValue": "defailtval"
+			}
+		},
 		"annotations": []
 	}
 }
