@@ -42,7 +42,7 @@
 				}
 			},
 			{
-				"name": "Spark1",
+				"name": "curationprocessor",
 				"type": "HDInsightSpark",
 				"dependsOn": [
 					{
