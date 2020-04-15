@@ -1,16 +1,31 @@
 {
-	"name": "destDS",
+	"name": "stagedest",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobLinkedservice",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filecontainer": {
+				"type": "string"
+			},
+			"filepath": {
+				"type": "string"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileSystem": "raw"
+				"fileName": {
+					"value": "@dataset().filepath",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().filecontainer",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
