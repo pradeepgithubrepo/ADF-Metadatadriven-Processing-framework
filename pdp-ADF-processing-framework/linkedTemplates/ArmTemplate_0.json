@@ -652,7 +652,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"rootPath": "abfss://jars@pradeepdatalake.dfs.core.windows.net/",
+							"rootPath": "jars@pradeepdatalake.dfs.core.windows.net/",
 							"entryFilePath": "sample-1.0-SNAPSHOT.jar",
 							"arguments": [
 								"@activity('parmlookup').output.firstRow.Prop_0",
