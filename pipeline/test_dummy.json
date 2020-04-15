@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Hive1",
-				"type": "HDInsightHive",
+				"name": "Spark1",
+				"type": "HDInsightSpark",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -15,15 +15,9 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"scriptPath": "hql/infectcase.hql",
-					"defines": {
-						"srclocation": "abfss://source@pradeepdatalake.dfs.core.windows.net/activeinfections/total_cases.csv",
-						"loadingdate": {
-							"value": "@formatDateTime(utcnow(),'yyyy-MM-dd')",
-							"type": "Expression"
-						}
-					},
-					"scriptLinkedService": {
+					"rootPath": "jars",
+					"entryFilePath": "sample-1.0-SNAPSHOT.jar",
+					"sparkJobLinkedService": {
 						"referenceName": "BlobLinkedservice",
 						"type": "LinkedServiceReference"
 					}
