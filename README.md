@@ -1,5 +1,5 @@
 # ADF-Metadatadriven-Processing-framework
-A Parametrised End to End Big data processing in Azure Data Factory 
+A Parametrised End to End Spark based Big data processing in Azure Data Factory 
 
 ![alt text](https://github.com/pradeepgithubrepo/ADF-Metadatadriven-Processing-framework/blob/master/0stage1-worflow.png)
 ![alt text](https://github.com/pradeepgithubrepo/ADF-Metadatadriven-Processing-framework/blob/master/0pipeline%20paramters.png)
