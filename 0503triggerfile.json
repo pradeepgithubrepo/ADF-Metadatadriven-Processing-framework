@@ -1,0 +1,24 @@
+{
+    "properties": {
+        "trigger_hivelocation": {
+            "type": "string"
+        },
+        "trigger_loc": {
+            "type": "string"
+        },
+        "trigger_partition": {
+            "type": "string"
+        },
+        "trigger_target": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}
+
+{
+    "trigger_hivelocation": "@{pipeline().parameters.trigger_hivelocation}",
+    "trigger_loc": "@{pipeline().parameters.trigger_loc}",
+    "trigger_partition": "@{pipeline().parameters.trigger_partition}",
+    "trigger_target": "@{pipeline().parameters.trigger_target}"
+}

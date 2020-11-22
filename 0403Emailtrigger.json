@@ -1,0 +1,28 @@
+{
+    "properties": {
+        "DataFactoryName": {
+            "type": "string"
+        },
+        "EmailTo": {
+            "type": "string"
+        },
+        "ErrorMessage": {
+            "type": "string"
+        },
+        "PipelineName": {
+            "type": "string"
+        },
+        "Subject": {
+            "type": "string"
+        }
+    },
+    "type": "object"
+}
+
+{
+    "DataFactoryName": "@{pipeline().DataFactory}",
+    "PipelineName": "@{pipeline().Pipeline}",
+    "Subject": "@{pipeline().parameters.Subject}",
+    "ErrorMessage": "@{pipeline().parameters.ErrorMessage}",
+    "EmailTo": "@pipeline().parameters.EmailTo"
+}
