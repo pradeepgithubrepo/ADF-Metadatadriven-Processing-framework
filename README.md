@@ -1,5 +1,5 @@
 # ADF-Metadatadriven-Processing-framework
-A Parametrised End to End Spark based Big data processing in Azure Data Factory 
+A Parametrised End to End Spark based Big data processing in Azure Data Factory. Tech stack involoving Az Data Factory, Az Databricks, Az HDInsight, Az Function,Az Keyvault, Az Data Lake  
 
 # Overview
 https://github.com/pradeepgithubrepo/ADF-Metadatadriven-Processing-framework/blob/master/ADF-Metadatadriven-Processing-framework%20public%20version.pdf
